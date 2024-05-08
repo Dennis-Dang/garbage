@@ -12,12 +12,12 @@ class Card:
 
 class Game:
     def __init__(self):
-        self.deck: list[Card]
+        self.deck: list[Card] = list()
         for suit in suits:
             for rank in ranks:
                 self.deck.append(Card(suit, rank))
         random.shuffle(self.deck)
 
 
-if __name__ == "main":
+if __name__ == "__main__":
     game = Game()
