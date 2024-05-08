@@ -1,7 +1,7 @@
 import random
 
 suits: list[str] = ['Spade', 'Club', 'Heart', 'Diamond']
-ranks: list[str] = ['A', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'K']
+ranks: list[str] = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
 
 
 class Card:
