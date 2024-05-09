@@ -19,13 +19,19 @@ class Game:
         random.shuffle(self.deck)
 
         self.players = {
-            "player1": [],
-            "player2": []
+            "Player 1": [],
+            "Player 2": []
         }
 
         for i in range(10):
-            self.players["player1"].append(self.deck.pop())
-            self.players["player2"].append(self.deck.pop())
+            self.players["Player 1"].append(self.deck.pop())
+            self.players["Player 2"].append(self.deck.pop())
+
+    def _show_cards(self):
+        for player_name, player_cards in self.players.items():
+            print(f"\n{player_name}'s Cards: ")
+            for card in player_cards:
+                print(card.suit, card.rank)
 
 
 if __name__ == "__main__":
