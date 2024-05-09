@@ -18,6 +18,16 @@ class Game:
                 self.deck.append(Card(suit, rank))
         random.shuffle(self.deck)
 
+        self.players = {
+            "player1": [],
+            "player2": []
+        }
+
+        for i in range(10):
+            self.players["player1"].append(self.deck.pop())
+            self.players["player2"].append(self.deck.pop())
+
 
 if __name__ == "__main__":
     game = Game()
+    2+2
