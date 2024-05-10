@@ -8,6 +8,10 @@ class Card:
     def __init__(self, suit, rank):
         self.suit = suit
         self.rank = rank
+        self.flipped = False
+
+    def flip(self):
+        self.flipped = not self.flipped
 
 
 class Game:
@@ -27,13 +31,24 @@ class Game:
             self.players["Player 1"].append(self.deck.pop())
             self.players["Player 2"].append(self.deck.pop())
 
-    def _show_cards(self):
+    def show_cards(self):
         for player_name, player_cards in self.players.items():
             print(f"\n{player_name}'s Cards: ")
+            print_str = str()
+            itr: int = 0
             for card in player_cards:
-                print(card.suit, card.rank)
+                if not card.flipped:
+                    print_str += "[X] "
+                else:
+                    print_str += f"[{card.rank}] "
+                # Each card is laid out in rows of 5 for each player.
+                if itr == 4:
+                    print_str += "\n"
+                itr += 1
+            print(print_str)
 
 
 if __name__ == "__main__":
     game = Game()
     print('DEBUG: Game initialized')
+    game.show_cards()
