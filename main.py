@@ -13,6 +13,12 @@ class Card:
     def flip(self):
         self.flipped = not self.flipped
 
+    def get_card(self):
+        if not self.flipped:
+            return "[X]"
+        else:
+            return [f"{self.rank}"]
+
 
 class Game:
     def __init__(self):
@@ -38,10 +44,7 @@ class Game:
             print_str = str()
             itr: int = 0
             for card in player_cards:
-                if not card.flipped:
-                    print_str += "[X] "
-                else:
-                    print_str += f"[{card.rank}] "
+                print_str += f"{card.get_card()} "
                 # Each card is laid out in rows of 5 for each player.
                 if itr == 4:
                     print_str += "\n"
