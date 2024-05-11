@@ -26,6 +26,7 @@ class Game:
             "Player 1": [],
             "Player 2": []
         }
+        self.turn_queue = list(self.players)
 
         for i in range(10):
             self.players["Player 1"].append(self.deck.pop())
