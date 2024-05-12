@@ -20,6 +20,24 @@ class Card:
             return [f"{self.rank}"]
 
 
+class Player:
+    def __init__(self, name: str, cards: list[Card]):
+        self.name = name
+        self.cards = cards
+
+    def show_cards(self):
+        print(f"\n{self.name}'s Cards: ")
+        idx: int = 0
+        print_str = str()
+        for card in self.cards:
+            print_str += f"{card.get_card()} "
+            # Each card is laid out in rows of 5 for each player.
+            if idx == 4:
+                print_str += "\n"
+            idx += 1
+        print(print_str)
+
+
 class Game:
     def __init__(self):
         self.deck: list[Card] = list()
@@ -28,31 +46,22 @@ class Game:
                 self.deck.append(Card(suit, rank))
         random.shuffle(self.deck)
 
-        self.players = {
-            "Player 1": [],
-            "Player 2": []
-        }
-        self.turn_queue = list(self.players)
+        self.turn_queue = list()
+        self.players: list[Player] = []
+        # 2 players
+        for i in range(2):
+            name = input(f"Enter Player {i+1}'s name: ")
+            self.turn_queue.insert(0, name)
 
-        for i in range(10):
-            self.players["Player 1"].append(self.deck.pop())
-            self.players["Player 2"].append(self.deck.pop())
-
-    def show_cards(self):
-        for player_name, player_cards in self.players.items():
-            print(f"\n{player_name}'s Cards: ")
-            print_str = str()
-            itr: int = 0
-            for card in player_cards:
-                print_str += f"{card.get_card()} "
-                # Each card is laid out in rows of 5 for each player.
-                if itr == 4:
-                    print_str += "\n"
-                itr += 1
-            print(print_str)
+            # Deal 10 cards per player
+            card_deal = []  # Temporarily holds cards for player.
+            for j in range(10):
+                card_deal.append(self.deck.pop())
+            self.players.append(Player(name, card_deal))
 
 
 if __name__ == "__main__":
     game = Game()
     print('DEBUG: Game initialized')
-    game.show_cards()
+    for player in game.players:
+        player.show_cards()
