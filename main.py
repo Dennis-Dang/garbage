@@ -1,4 +1,5 @@
 import random
+import math
 
 suits: list[str] = ['Spade', 'Club', 'Heart', 'Diamond']
 ranks: list[str] = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
@@ -41,15 +42,26 @@ class Player:
 class Game:
     def __init__(self):
         self.deck: list[Card] = list()
-        for suit in suits:
-            for rank in ranks:
-                self.deck.append(Card(suit, rank))
+        num_decks_needed: int = int()
+
+        num_players: int = int(input("How many players? "))
+        if num_players < 2:
+            print("Sorry, at least 2 players is required for this game.")
+            return
+        else:
+            # Limitation: math.ceil supports up to 52 bits of precision.
+            # It's beyond the scope of the game, as it's impractical to serve that many players.
+            num_decks_needed = math.ceil(num_players / 2)
+        for i in range(num_decks_needed):
+            for suit in suits:
+                for rank in ranks:
+                    self.deck.append(Card(suit, rank))
         random.shuffle(self.deck)
 
         self.turn_queue = list()
         self.players: list[Player] = []
         # 2 players
-        for i in range(2):
+        for i in range(num_players):
             name = input(f"Enter Player {i+1}'s name: ")
             self.turn_queue.insert(0, name)
 
