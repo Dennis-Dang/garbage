@@ -40,11 +40,10 @@ class Player:
 
 
 class Game:
-    def __init__(self):
+    def __init__(self, num_players: int):
         self.deck: list[Card] = list()
         num_decks_needed: int = int()
 
-        num_players: int = int(input("How many players? "))
         if num_players < 2:
             print("Sorry, at least 2 players is required for this game.")
             return
@@ -73,7 +72,10 @@ class Game:
 
 
 if __name__ == "__main__":
-    game = Game()
-    print('DEBUG: Game initialized')
-    for player in game.players:
-        player.show_cards()
+    game = Game(num_players=2)
+    if len(game.deck) == 0:
+        pass
+    else:
+        print('DEBUG: Game initialized')
+        for player in game.players:
+            player.show_cards()
