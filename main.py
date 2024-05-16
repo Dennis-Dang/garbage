@@ -25,6 +25,7 @@ class Player:
     def __init__(self, name: str, cards: list[Card]):
         self.name = name
         self.cards = cards
+        self.max_cards = 10
 
     def show_cards(self):
         print(f"\n{self.name}'s Cards: ")
@@ -37,6 +38,25 @@ class Player:
                 print_str += "\n"
             idx += 1
         print(print_str)
+
+    # Expects a card to be drawn from the deck. Returns a card to discard to the garbage pile.
+    def draw(self, card: Card) -> Card:
+        pos: int = int()
+        swap: Card
+        print(f"It's a {card.rank} of {card.suit}s!")
+        if card.rank == 'K':
+            pos = int(input("It's a King!, enter the position you would want to swap it with: "))
+        elif card.rank in ranks[:self.max_cards-1]:
+            # When the player already has a card in the correct slot --> discard.
+            if self.cards[ranks.index(card.rank)].flipped and self.cards[ranks.index(card.rank)] == card.rank:
+                return card
+            swap = self.cards[ranks.index(card.rank)]
+            swap.flip()
+            self.cards[ranks.index(card.rank)] = card
+            # Keep swapping until you can't anymore.
+            self.draw(swap)
+        else:
+            return card
 
 
 class Game:
