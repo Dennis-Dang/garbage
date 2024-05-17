@@ -79,7 +79,7 @@ class Game:
 
         self.turn_queue = list()
         self.players: list[Player] = []
-        # 2 players
+
         for i in range(num_players):
             name = input(f"Enter Player {i+1}'s name: ")
             self.turn_queue.insert(0, name)
