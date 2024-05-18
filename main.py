@@ -44,19 +44,21 @@ class Player:
         pos: int = int()
         swap: Card
         print(f"It's a {card.rank} of {card.suit}s!")
-        if card.rank == 'K':
-            pos = int(input("It's a King!, enter the position you would want to swap it with: "))
-        elif card.rank in ranks[:self.max_cards-1]:
-            # When the player already has a card in the correct slot --> discard.
-            if self.cards[ranks.index(card.rank)].flipped and self.cards[ranks.index(card.rank)] == card.rank:
-                return card
-            swap = self.cards[ranks.index(card.rank)]
-            swap.flip()
-            self.cards[ranks.index(card.rank)] = card
-            # Keep swapping until you can't anymore.
-            self.draw(swap)
-        else:
+        if int(input("1) Discard \n2) Swap\n> ")) == 1:
             return card
+        else:
+            self.show_cards()
+            correct_input = False
+            while not correct_input:
+                choice = int(input("Which position do you want to swap with? \n"))
+                # If card number matches chosen card position to swap with or
+                # If the card drawn is a King
+                if choice+1 == card.rank or card.rank == 'K':
+                    self.cards[choice].flip()
+                    self.cards.insert(choice, card)
+                    return self.draw(self.cards.pop(choice+1))
+
+                print("You can't swap with this card because the card number doesn't match the card number position.")
 
 
 class Game:
