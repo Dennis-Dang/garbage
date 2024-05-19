@@ -60,10 +60,15 @@ class Player:
 
                 print("You can't swap with this card because the card number doesn't match the card number position.")
 
+    #TODO Implement checkWin
+    def check_win(self):
+        pass
+
 
 class Game:
     def __init__(self, num_players: int):
         self.deck: list[Card] = list()
+        self.garbage: list[Card]= list()
         num_decks_needed: int = int()
 
         if num_players < 2:
@@ -92,12 +97,25 @@ class Game:
                 card_deal.append(self.deck.pop())
             self.players.append(Player(name, card_deal))
 
+    def run(self):
+        winner: list[str] = list(str())
+        while len(winner) != 2:
+            for player in self.players:
+                self.garbage.append(player.draw(self.deck.pop()))
+                # Check win condition
+                if player.check_win():
+                    winner += player.name
+                    if len(winner) == 1:
+                        print(f"{winner} has all cards filled up! Last Round!")
+                    self.players.remove(player)
+                    break
+
+        if len(winner) == 1:
+            print(f"The winner is: {winner[0]}")
+        else:
+            print(f"There seems to be a tie between: {winner}")
+
 
 if __name__ == "__main__":
     game = Game(num_players=2)
-    if len(game.deck) == 0:
-        pass
-    else:
-        print('DEBUG: Game initialized')
-        for player in game.players:
-            player.show_cards()
+    game.run()
