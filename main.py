@@ -60,9 +60,12 @@ class Player:
 
                 print("You can't swap with this card because the card number doesn't match the card number position.")
 
-    #TODO Implement checkWin
     def check_win(self):
-        pass
+        # If all the cards are flipped -> they win the game
+        for card in self.cards:
+            if not card.flipped:
+                return False
+        return True
 
 
 class Game:
