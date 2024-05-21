@@ -1,5 +1,6 @@
 import random
 import math
+import pyinputplus
 
 suits: list[str] = ['Spade', 'Club', 'Heart', 'Diamond']
 ranks: list[str] = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
@@ -39,26 +40,19 @@ class Player:
             idx += 1
         print(print_str)
 
-    # Expects a card to be drawn from the deck. Returns a card to discard to the garbage pile.
-    def draw(self, card: Card) -> Card:
-        pos: int = int()
-        swap: Card
-        print(f"It's a {card.rank} of {card.suit}s!")
-        if int(input("1) Discard \n2) Swap\n> ")) == 1:
-            return card
-        else:
-            self.show_cards()
-            correct_input = False
-            while not correct_input:
-                choice = int(input("Which position do you want to swap with? \n"))
-                # If card number matches chosen card position to swap with or
-                # If the card drawn is a King
-                if choice+1 == card.rank or card.rank == 'K':
-                    self.cards[choice].flip()
-                    self.cards.insert(choice, card)
-                    return self.draw(self.cards.pop(choice+1))
+    # Continue swapping cards until encounter garbage card to return/discard
+    def swap(self, card: Card) -> Card:
+        correct_input = False
+        while not correct_input:
+            choice = int(input("Which position do you want to swap with? \n"))
+            # If card number matches chosen card position to swap with or
+            # If the card drawn is a King
+            if str(choice) == card.rank or card.rank == 'K':
+                self.cards[choice - 1].flip()
+                self.cards.insert(choice, card)
+                return self.swap(self.cards.pop(choice + 1))
 
-                print("You can't swap with this card because the card number doesn't match the card number position.")
+            print("You can't swap with this card because the card number doesn't match the card number position.")
 
     def check_win(self):
         # If all the cards are flipped -> they win the game
@@ -100,11 +94,29 @@ class Game:
                 card_deal.append(self.deck.pop())
             self.players.append(Player(name, card_deal))
 
+    def draw(self, player: Player):
+        if len(self.garbage) == 0:
+            choice = pyinputplus.inputMenu(['Draw new Card'])
+        else:
+            print(f"Garbage: {self.garbage[0]}")
+            choice = pyinputplus.inputMenu(['Garbage', 'Draw new Card'],
+                                           "Do you want to draw from Garbage or a new card?")
+        hand: Card
+        if choice == 'Draw new Card':
+            hand = self.deck.pop()
+            hand.flip()
+        elif choice == 'Garbage':
+            hand = self.garbage.pop()
+
+        self.garbage.append(player.swap(hand))
+
     def run(self):
         winner: list[str] = list(str())
         while len(winner) != 2:
             for player in self.players:
-                self.garbage.append(player.draw(self.deck.pop()))
+                print(f"It's {player.name}'s turn!")
+                player.show_cards()
+                self.draw(player)
                 # Check win condition
                 if player.check_win():
                     winner += player.name
