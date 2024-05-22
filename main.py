@@ -44,15 +44,29 @@ class Player:
     def swap(self, card: Card) -> Card:
         correct_input = False
         while not correct_input:
-            choice = int(input("Which position do you want to swap with? \n"))
-            # If card number matches chosen card position to swap with or
-            # If the card drawn is a King
-            if str(choice) == card.rank or card.rank == 'K':
-                self.cards[choice - 1].flip()
-                self.cards.insert(choice, card)
-                return self.swap(self.cards.pop(choice + 1))
+            self.show_cards()
 
-            print("You can't swap with this card because the card number doesn't match the card number position.")
+            if card.rank == 'Q' or card.rank == 'J':
+                print(f"You got {card.rank}.. this card is garbage.")
+                return card
+
+            choice = pyinputplus.inputMenu(['Swap', 'Discard'],
+                                           "Do you want to swap or discard?\n",
+                                           numbered=True)
+
+            if choice == 'Discard':
+                return card
+            else:
+                choice = int(input(f"Which position do you want to swap {card.rank} with?  \n"))
+                # If card number matches chosen card position to swap with or
+                # If the card drawn is a King
+                if str(choice) == card.rank or card.rank == 'K' or (choice == 1 and card.rank == 'A'):
+                    self.cards[choice - 1].flip()
+                    print(f"The card at position {choice} was {self.cards[choice-1].rank} of {self.cards[choice-1].suit}")
+                    self.cards.insert(choice, card)
+                    return self.swap(self.cards.pop(choice-1))
+
+                print("You can't swap with this card because the card number doesn't match the card number position.")
 
     def check_win(self):
         # If all the cards are flipped -> they win the game
@@ -96,25 +110,30 @@ class Game:
 
     def draw(self, player: Player):
         if len(self.garbage) == 0:
-            choice = pyinputplus.inputMenu(['Draw new Card'])
+            print("Garbage is empty, so you draw from the deck...")
+            choice = 'Draw new Card'
         else:
-            print(f"Garbage: {self.garbage[0]}")
+            print(f"Garbage: {self.garbage[-1].rank}")
             choice = pyinputplus.inputMenu(['Garbage', 'Draw new Card'],
-                                           "Do you want to draw from Garbage or a new card?")
+                                           "Do you want to draw from Garbage or a new card?\n",
+                                           numbered=True)
         hand: Card
         if choice == 'Draw new Card':
             hand = self.deck.pop()
             hand.flip()
+            print(f"It's a {hand.rank} of {hand.suit}!")
         elif choice == 'Garbage':
             hand = self.garbage.pop()
 
         self.garbage.append(player.swap(hand))
+        print(f"Ending turn..")
 
     def run(self):
         winner: list[str] = list(str())
         while len(winner) != 2:
             for player in self.players:
                 print(f"It's {player.name}'s turn!")
+                input("Press Enter to continue...")
                 player.show_cards()
                 self.draw(player)
                 # Check win condition
