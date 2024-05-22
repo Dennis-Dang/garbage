@@ -61,7 +61,8 @@ class Player:
                 # If card number matches chosen card position to swap with or
                 # If the card drawn is a King
                 if str(choice) == card.rank or card.rank == 'K' or (choice == 1 and card.rank == 'A'):
-                    self.cards[choice - 1].flip()
+                    if not self.cards[choice-1].flipped:
+                        self.cards[choice - 1].flip()
                     print(f"The card at position {choice} was {self.cards[choice-1].rank} of {self.cards[choice-1].suit}")
                     self.cards.insert(choice, card)
                     return self.swap(self.cards.pop(choice-1))
