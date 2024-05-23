@@ -131,7 +131,8 @@ class Game:
 
     def run(self):
         winner: list[str] = list(str())
-        while len(winner) != 2:
+        done = False
+        while len(winner) != 2 and not done:
             for player in self.players:
                 print(f"It's {player.name}'s turn!")
                 input("Press Enter to continue...")
@@ -139,9 +140,11 @@ class Game:
                 self.draw(player)
                 # Check win condition
                 if player.check_win():
-                    winner += player.name
+                    winner.append(player.name)
                     if len(winner) == 1:
-                        print(f"{winner} has all cards filled up! Last Round!")
+                        print(f"{winner[0]} has all cards filled up! Last Round!")
+                    elif len(winner) > 1:
+                        done = True
                     self.players.remove(player)
                     break
 
