@@ -109,6 +109,11 @@ class Game:
                 card_deal.append(self.deck.pop())
             self.players.append(Player(name, card_deal))
 
+    def reshuffle(self):
+        for card in range(len(self.garbage)-1):
+            self.deck.append(self.garbage.pop(0))
+        random.shuffle(self.deck)
+
     def draw(self, player: Player):
         if len(self.garbage) == 0:
             print("Garbage is empty, so you draw from the deck...")
@@ -134,6 +139,10 @@ class Game:
         done = False
         while len(winner) != 2 and not done:
             for player in self.players:
+                if len(self.deck) == 0:
+                    print("Out of cards. Shuffling from garbage.")
+                    self.reshuffle()
+
                 print(f"It's {player.name}'s turn!")
                 input("Press Enter to continue...")
                 player.show_cards()
